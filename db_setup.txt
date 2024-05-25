@@ -1,0 +1,19 @@
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib
+sudo -i -u postgres
+psql
+
+CREATE USER hassan WITH PASSWORD 'mhp78692';
+CREATE DATABASE smart_media_monitor;
+GRANT ALL PRIVILEGES ON DATABASE smart_media_monitor TO myuser;
+\q
+
+exit
+
+psql -h localhost -U hassan -d smart_media_monitor
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
