@@ -16,8 +16,8 @@ from exception_handler import (
     python_exception_handler,
     errors_dict,
 )
-from security import router as security_router, get_current_user
-from models import User, Comment
+# from security import router as security_router, get_current_user
+from models import User, Comment, UserCredentials
 
 # origins = ["http://localhost:5173"]
 
@@ -40,7 +40,7 @@ app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(Exception, python_exception_handler)
 
 # Load security api calls
-app.include_router(security_router)
+# app.include_router(security_router)
 
 
 # Retrieve comments from the database
@@ -79,35 +79,41 @@ async def startup_event():
     pass
 
 
-async def create_user(username: str, password: str) -> None:
+async def create_user(username: str, channel_id: str, password: str) -> None:
     conn = await asyncpg.connect(DB_URI)
     try:
         await conn.execute(
-            "INSERT INTO users (username, password) VALUES ($1, $2)",
+            "INSERT INTO users (username, channel_id, password) VALUES ($1, $2, $3)",
             username,
+            channel_id,
             password
         )
     finally:
         await conn.close()
 
 
-# Function to authenticate user credentials
 async def authenticate_user(username: str, password: str) -> bool:
-    async with asyncpg.connect(DB_URI) as conn:
-        query = "SELECT * FROM users WHERE username = $1 AND password = $2"
-        user = await conn.fetchrow(query, username, password)
+    conn = await asyncpg.connect(DB_URI)
+    try:
+        # Execute the query to check user credentials
+        query = "SELECT COUNT(*) FROM users WHERE username = $1 AND password = $2"
+        count = await conn.fetchval(query, username, password)
+    finally:
+        # Close the database connection
+        await conn.close()
 
-    return bool(user)
+    # If count is greater than 0, the user with the provided credentials exists
+    return count > 0
 
 
 @app.post("/signup/")
 async def signup(user_data: User):
-    await create_user(user_data.username, user_data.password)
+    await create_user(user_data.username, user_data.channel_id, user_data.password)
     return {"message": "User created successfully"}
 
 
 @app.post("/login/")
-async def login(user_data: User):
+async def login(user_data: UserCredentials):
     user_authenticated = await authenticate_user(user_data.username, user_data.password)
     if not user_authenticated:
         raise HTTPException(status_code=401, detail="Invalid credentials")

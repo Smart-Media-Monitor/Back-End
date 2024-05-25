@@ -12,8 +12,11 @@ exit
 
 psql -h localhost -U hassan -d smart_media_monitor
 
+DROP TABLE IF EXISTS users;
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    channel_id VARCHAR(50)
 );

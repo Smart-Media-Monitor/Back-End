@@ -9,6 +9,16 @@ class User(BaseModel):
     """
 
     username: str
+    channel_id : str
+    password: str
+
+
+class UserCredentials(BaseModel):
+    """
+    User Credentials Object
+    """
+
+    username: str
     password: str
 
 

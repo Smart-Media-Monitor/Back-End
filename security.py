@@ -1,3 +1,4 @@
+'''
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import jwt
@@ -170,3 +171,4 @@ async def login(user: User, response: Response):
     )
 
     return {"detail": "authenticated"}
+'''
