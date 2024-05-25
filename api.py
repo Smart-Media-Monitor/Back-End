@@ -45,30 +45,34 @@ app.add_exception_handler(Exception, python_exception_handler)
 
 # Retrieve comments from the database
 async def fetch_comments(label: str = None) -> List[Comment]:
-    async with asyncpg.connect(DB_URI) as conn:
+    conn = await asyncpg.connect(DB_URI)
+    try:
         if label:
-            query = "SELECT * FROM comments WHERE label = $1"
+            query = "SELECT * FROM comments WHERE Label = $1"
             records = await conn.fetch(query, label)
         else:
             query = "SELECT * FROM comments"
             records = await conn.fetch(query)
 
-    comments = [
-        Comment(
-            comment_id=row['comment_id'],
-            name=row['name'],
-            comment=row['comment'],
-            likes=row['likes'],
-            time=str(row['time']),
-            reply_count=row['reply_count'],
-            label=row['label'],
-            label_score=row['label_score'],
-            video_id=row['video_id']
-        )
-        for row in records
-    ]
+        comments = [
+            Comment(
+                id=row['id'],
+                name=row['name'],
+                comment=row['comment'],
+                likes=row['likes'],
+                time=row['time'],
+                reply_count=row['reply_count'],
+                label=row['label'],
+                label_score=row['label_score'],
+                video_id=row['video_id'],
+                comment_id=row['comment_id']
+            )
+            for row in records
+        ]
 
-    return comments
+        return comments
+    finally:
+        await conn.close()
 
 
 @app.on_event("startup")

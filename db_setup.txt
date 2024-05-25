@@ -20,3 +20,16 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     channel_id VARCHAR(50)
 );
+
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    Name VARCHAR(255),
+    Comment TEXT,
+    Likes INTEGER,
+    Time TIMESTAMP,
+    Reply_Count INTEGER,
+    Label VARCHAR(255),
+    Label_Score FLOAT,
+    Video_ID VARCHAR(255),
+    Comment_Id INTEGER
+);

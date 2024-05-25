@@ -1,6 +1,20 @@
 from pydantic import BaseModel, Field
 from config import CONFIG
 import numpy as np
+from datetime import datetime
+
+
+class Comment(BaseModel):
+    id: int
+    name: str
+    comment: str
+    likes: int
+    time: datetime
+    reply_count: int
+    label: str
+    label_score: float
+    video_id: str
+    comment_id: int
 
 
 class User(BaseModel):
@@ -20,18 +34,6 @@ class UserCredentials(BaseModel):
 
     username: str
     password: str
-
-
-class Comment(BaseModel):
-    comment_id: int
-    name: str
-    comment: str
-    likes: int
-    time: str  # Modify this based on your timestamp format
-    reply_count: float
-    label: str
-    label_score: float
-    video_id: str
 
 
 class ErrorResponse(BaseModel):
