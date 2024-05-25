@@ -28,5 +28,10 @@
         "id": "5",
         "Label": "Suggestions",
         "Summary": "- Acoustical Improvement: Suggests using a lavalier microphone for better acoustical intelligibility.\n- Algebraic Method: Questions the algebraic aspect of the method in certain scenarios.\n- Speak-o: Jokes about a typo in speech.\n- Sound Improvement: Suggests improving sound with separate microphones.\n- Motivational Statement: States that anyone can earn as much money as they want.\n- Integration Rule: Asks about a rule for integration.\n- Pronunciation Note: Notes the pronunciation difference for \"J\" in different languages."
+    },
+    {
+        "id": "6",
+        "Label": "Offensive",
+        "Summary": "The comments include phrases that may be considered offensive, such as swearing and derogatory language (mfs). They reflect a range of tones, from casual to enthusiastic, but the use of offensive language stands out as potentially inappropriate. The offensive language in the comments appears to stem from a lack of restraint or consideration for social norms. It could also be driven by a desire to express strong emotions or opinions without filtering language."
     }
 ]

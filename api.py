@@ -157,6 +157,40 @@ async def get_summary(label: str = Query(...)):
         return {"error": "Summary not found"}
 
 
+@app.get("/query/")
+async def query_chatgpt(query: str = Query(..., description="The user query to be processed by ChatGPT")):
+    try:
+        # Import the function from chatgpt.py
+        from chatgpt import get_chatgpt_response
+
+        # Call the function with the user query
+        response = get_chatgpt_response(query)
+
+        # Return the response
+        return {"response": response}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/script/")
+async def script_generator(topic: str = Query(..., description="The user query to be processed by ChatGPT")):
+    try:
+        # Import the function from chatgpt.py
+        from chatgpt import get_chatgpt_script
+        
+        query = "Imagine you're a Youtuber and you run a Youtube channel. Write me detailed script for a youtube video on " + topic + ". It's the script which the youtuber will speak during the video. If you do not know anything make suitable assumptions."
+
+        # Call the function with the user query
+        response = get_chatgpt_script(query)
+
+        # Return the response
+        return {"response": response}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/")
 def read_root():
     """
