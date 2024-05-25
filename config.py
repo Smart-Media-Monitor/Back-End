@@ -2,11 +2,13 @@ import os
 from pathlib import Path
 import json
 
+DB_USER = "hassan"
+DB_PASSWORD = "mhp78692"
 DB_HOST = "localhost"
 DB_NAME = "smart_media_monitor"
 
-# Construct the PostgreSQL connection URI without username and password
-DB_URI = f"postgresql://{DB_HOST}/{DB_NAME}"
+DB_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+
 
 # Global configuration
 GLOBAL_CONFIG = {"VERSION": 0.1, "db_uri": DB_URI}

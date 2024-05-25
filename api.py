@@ -24,7 +24,7 @@ from models import User, Comment
 # Initialize API
 app = FastAPI(
     title="Endpoints for analysis calls for Smrt Media Monitor",
-    version=CONFIG["VERSION"],
+    version="0.1",
 )
 
 app.add_middleware(
@@ -79,12 +79,16 @@ async def startup_event():
     pass
 
 
-# Function to create a new user in the database
 async def create_user(username: str, password: str) -> None:
-    async with asyncpg.connect(DB_URI) as conn:
+    conn = await asyncpg.connect(DB_URI)
+    try:
         await conn.execute(
-            "INSERT INTO users (username, password) VALUES ($1, $2)", username, password
+            "INSERT INTO users (username, password) VALUES ($1, $2)",
+            username,
+            password
         )
+    finally:
+        await conn.close()
 
 
 # Function to authenticate user credentials
@@ -126,4 +130,4 @@ def read_root():
 
 if __name__ == "__main__":
     # start api
-    uvicorn.run("api:app", host="127.0.0.1", port=8080, reload=True)
+    uvicorn.run("api:app", host="127.0.0.1", port=8000, reload=True)
