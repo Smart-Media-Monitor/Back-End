@@ -33,3 +33,9 @@ CREATE TABLE comments (
     Video_ID VARCHAR(255),
     Comment_Id INTEGER
 );
+
+CREATE TABLE summaries (
+    id SERIAL PRIMARY KEY,
+    Label VARCHAR(255),
+    Summary TEXT
+);

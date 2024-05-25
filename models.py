@@ -17,6 +17,12 @@ class Comment(BaseModel):
     comment_id: int
 
 
+class Summary(BaseModel):
+    id: int
+    label: str
+    summary: str
+
+
 class User(BaseModel):
     """
     User Object

@@ -17,7 +17,7 @@ from exception_handler import (
     errors_dict,
 )
 # from security import router as security_router, get_current_user
-from models import User, Comment, UserCredentials
+from models import User, Comment, UserCredentials, Summary
 
 # origins = ["http://localhost:5173"]
 
@@ -75,6 +75,24 @@ async def fetch_comments(label: str = None) -> List[Comment]:
         await conn.close()
 
 
+# Retrieve summaries from the database
+async def fetch_summaries(label: str) -> Summary:
+    conn = await asyncpg.connect(DB_URI)
+    try:
+        query = "SELECT * FROM summaries WHERE label = $1"
+        record = await conn.fetchrow(query, label)
+        if record:
+            return Summary(
+                id=record['id'],
+                label=record['label'],
+                summary=record['summary']
+            )
+        else:
+            return None
+    finally:
+        await conn.close()
+
+
 @app.on_event("startup")
 async def startup_event():
     """
@@ -128,6 +146,15 @@ async def login(user_data: UserCredentials):
 async def get_comments(label: str = Query(None)):
     comments = await fetch_comments(label)
     return comments
+
+
+@app.get("/summaries/", response_model=Summary)
+async def get_summary(label: str = Query(...)):
+    summary = await fetch_summaries(label)
+    if summary:
+        return summary
+    else:
+        return {"error": "Summary not found"}
 
 
 @app.get("/")
